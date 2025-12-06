@@ -1,1 +1,79 @@
-Hello World!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="fileUploadForm">
+        File: <input type="file" name="imageupload" id="imageupload"/><br>
+        Pixel Size: <input type="number" name="pixelsize" id="pixelsize"><br>
+        <input type="radio" name="imgmod" value="bnw" checked> <label for="bnw">blacknwhite</label><br>
+        <input type="radio" name="imgmod" value="avgr"> <label for="avgr">average red</label><br>
+        <input type="radio" name="imgmod" value="avgg"> <label for="avgg">average green</label><br>
+        <input type="radio" name="imgmod" value="avgb"> <label for="avgb">average blue</label><br>
+        <input type="radio" name="imgmod" value="inverse"> <label for="inverse">inverse</label><br>
+    </form>
+    <img id="imgres">
+    <script defer type="module">
+        function getImageMode() {
+            let imgmod = document.querySelector("input[name=imgmod][type=radio]:checked");
+            let modval;
+            switch (imgmod.value) {
+                case "bnw":
+                    modval = ImageMod.BlackNWhite;
+                    break;
+                case "avgr":
+                    modval = ImageMod.AverageRed;
+                    break;
+                case "avgg":
+                    modval = ImageMod.AverageGreen;
+                    break;
+                case "avgb":
+                    modval = ImageMod.AverageBlue;
+                    break;
+                case "inverse":
+                    modval = ImageMod.PixelSize;
+                    break;
+            }
+            return modval;
+        }
+        function updateImage() {
+            if (lastimg != null) {
+                let psize = Math.max(Number(pixelsize.value), 3);
+                let modified = test_arr(lastimg, psize, getImageMode());
+                img.src = URL.createObjectURL(new Blob([modified.buffer], {'type': 'image/png'}));
+            }
+        }
+        import init, { greet, test_arr, ImageMod } from "./wasmtest.js"
+        await init();
+        let lastimg = null;
+        let img = document.querySelector("#imgres");
+        let selector = document.querySelector("#imageupload");
+        let pixelsize = document.querySelector("#pixelsize");
+        let imgmodsel = document.querySelectorAll("input[type=radio][name=imgmod]");
+        for ( let i of imgmodsel ) {
+            i.addEventListener('change', (event) => {
+                updateImage();
+            })
+        }
+        selector.addEventListener('change', (event) => {
+            for(let i of event.target.files) {
+                const reader = new FileReader();
+                reader.addEventListener("loadend", (ev) => {
+                    let imgres = new Uint8Array(reader.result);
+                    let psize = Math.max(Number(pixelsize.value), 3);
+                    let modified = test_arr(imgres, psize, getImageMode());
+                    lastimg = imgres;
+                    img.src = URL.createObjectURL(new Blob([modified.buffer], { 'type': 'image/png' }));
+                })
+                reader.readAsArrayBuffer(i);
+            }
+        })
+        pixelsize.addEventListener('change', (event) => {
+            updateImage();
+        })
+    </script>
+</body>
+</html>
