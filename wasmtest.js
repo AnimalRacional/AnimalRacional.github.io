@@ -119,14 +119,20 @@ if (!('encodeInto' in cachedTextEncoder)) {
 let WASM_VECTOR_LEN = 0;
 
 /**
- * @enum {0 | 1 | 2 | 3 | 4}
+ * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10}
  */
 export const ImageMod = Object.freeze({
-    BlackNWhite: 0, "0": "BlackNWhite",
-    AverageRed: 1, "1": "AverageRed",
-    AverageBlue: 2, "2": "AverageBlue",
-    AverageGreen: 3, "3": "AverageGreen",
-    PixelSize: 4, "4": "PixelSize",
+    Normal: 0, "0": "Normal",
+    BlackNWhiteAvg: 1, "1": "BlackNWhiteAvg",
+    BlackNWhiteMin: 2, "2": "BlackNWhiteMin",
+    BlackNWhiteMax: 3, "3": "BlackNWhiteMax",
+    AverageRed: 4, "4": "AverageRed",
+    AverageBlue: 5, "5": "AverageBlue",
+    AverageGreen: 6, "6": "AverageGreen",
+    SwitchRG: 7, "7": "SwitchRG",
+    SwitchRB: 8, "8": "SwitchRB",
+    SwitchGB: 9, "9": "SwitchGB",
+    Inverse: 10, "10": "Inverse",
 });
 
 /**

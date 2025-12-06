@@ -2,11 +2,17 @@
 /* eslint-disable */
 
 export enum ImageMod {
-  BlackNWhite = 0,
-  AverageRed = 1,
-  AverageBlue = 2,
-  AverageGreen = 3,
-  PixelSize = 4,
+  Normal = 0,
+  BlackNWhiteAvg = 1,
+  BlackNWhiteMin = 2,
+  BlackNWhiteMax = 3,
+  AverageRed = 4,
+  AverageBlue = 5,
+  AverageGreen = 6,
+  SwitchRG = 7,
+  SwitchRB = 8,
+  SwitchGB = 9,
+  Inverse = 10,
 }
 
 export function greet(name: string): void;

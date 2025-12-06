@@ -9,35 +9,13 @@
     <form id="fileUploadForm">
         File: <input type="file" name="imageupload" id="imageupload"/><br>
         Pixel Size: <input type="number" name="pixelsize" id="pixelsize"><br>
-        <input type="radio" name="imgmod" value="bnw" checked> <label for="bnw">blacknwhite</label><br>
-        <input type="radio" name="imgmod" value="avgr"> <label for="avgr">average red</label><br>
-        <input type="radio" name="imgmod" value="avgg"> <label for="avgg">average green</label><br>
-        <input type="radio" name="imgmod" value="avgb"> <label for="avgb">average blue</label><br>
-        <input type="radio" name="imgmod" value="inverse"> <label for="inverse">inverse</label><br>
     </form>
     <img id="imgres">
     <script defer type="module">
         function getImageMode() {
             let imgmod = document.querySelector("input[name=imgmod][type=radio]:checked");
-            let modval;
-            switch (imgmod.value) {
-                case "bnw":
-                    modval = ImageMod.BlackNWhite;
-                    break;
-                case "avgr":
-                    modval = ImageMod.AverageRed;
-                    break;
-                case "avgg":
-                    modval = ImageMod.AverageGreen;
-                    break;
-                case "avgb":
-                    modval = ImageMod.AverageBlue;
-                    break;
-                case "inverse":
-                    modval = ImageMod.PixelSize;
-                    break;
-            }
-            return modval;
+            console.log(imgmod.value);
+            return imgmod.value;
         }
         function updateImage() {
             if (lastimg != null) {
@@ -47,6 +25,30 @@
             }
         }
         import init, { greet, test_arr, ImageMod } from "./wasmtest.js"
+        let form = document.getElementById("fileUploadForm");
+        let checked = false;
+        let n = 1;
+        console.log(ImageMod);
+        for ( let i of Object.entries(ImageMod) ) {
+            if ( (typeof i[1]) == "number") {
+                console.log(i);
+                let input = document.createElement("input");
+                input.type = "radio";
+                input.name = "imgmod";
+                input.value = i[1];
+                if ( !checked ) { input.checked = true; checked = true;}
+                let label = document.createElement("label");
+                label.for = input.value;
+                label.textContent = i[0];
+
+                form.appendChild(input); form.appendChild(label);
+                if ( n % 3 == 0 ) {
+                    console.log(n);
+                    form.appendChild(document.createElement("br"));
+                }
+                n++;
+            }
+        }
         await init();
         let lastimg = null;
         let img = document.querySelector("#imgres");
